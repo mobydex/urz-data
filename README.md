@@ -13,16 +13,62 @@
 
 ⚠️ Don't forget the `query=`
 
+* List all available named graphs in the store
 ```bash
-# List all available named graphs in the store
 curl https://copper.coypu.org/coypu --data-urlencode 'query=SELECT ?g { GRAPH ?g { } }'
 ```
 
-```bash
-# Count the number of triples in the (ship) ports dataset
-curl https://copper.coypu.org/coypu --data-urlencode \
-  'query=SELECT COUNT(*) { GRAPH <https://data.coypu.org/infrastructure/ports/> { ?s ?p ?o } }'
+<details>
+  <summary>Show SPARQL Result Set (JSON, excerpt)</summary>
+
+```json
+{ "head": {
+    "vars": [ "g" ]
+  } ,
+  "results": {
+    "bindings": [
+      { 
+        "g": { "type": "uri" , "value": "https://data.coypu.org/genesis/" }
+      } ,
+      { 
+        "g": { "type": "uri" , "value": "http://dalicc.net/licenselibrary/" }
+      } ,
+      { 
+        "g": { "type": "uri" , "value": "https://data.coypu.org/events/wikievents-archive/" }
+      }
+    ]
+  }
+}
 ```
+
+</details>
+
+
+* Count the number of triples in the (ship) ports dataset
+```bash
+curl https://copper.coypu.org/coypu --data-urlencode \
+  'query=SELECT (COUNT(*) AS ?c) { GRAPH <https://data.coypu.org/infrastructure/ports/> { ?s ?p ?o } }'
+```
+
+<details>
+<summary>Show SPARQL Result Set (JSON)</summary>
+
+```json
+{ "head": {
+    "vars": [ "c" ]
+  } ,
+  "results": {
+    "bindings": [
+      { 
+        "c": { "type": "literal" , "datatype": "http://www.w3.org/2001/XMLSchema#integer" , "value": "174005" }
+      }
+    ]
+  }
+}
+```
+
+</details>
+
 
 ### Visualize Query Results with Yasgui
 
