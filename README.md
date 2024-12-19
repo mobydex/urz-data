@@ -110,5 +110,5 @@ SELECT ?graph ?geom ?geomColor ?geomTooltip (?geomTooltip AS ?geomLabel) {
 ### Notes
 * *Named Graph* is essentially a dataset name.
 * [Fuseki](https://jena.apache.org/documentation/fuseki2/) is a framework for hosting services over RDF data. It is a component of the [Apache Jena](https://github.com/apache/jena) Semantic Web framework.
-* *Coypu* is the name of the project ([Website](https://coypu.org/)) in which the Fuseki server and the data loading pipelines were set up. We plan to keep the server running for at least a few more years.
+* *Coypu* is the name of the project ([Website](https://coypu.org/)) in which the Fuseki server and the data loading pipelines were set up. We plan to keep the server running for at least a few more years (status from 2024-12-19).
 
