@@ -1,13 +1,16 @@
 
-## Coypu Data
+# Coypu Data
 
-### Summary
+## Summary
 
 * Fuseki Server: https://copper.coypu.org/
 * SPARQL Endpoint: https://copper.coypu.org/coypu
+* GraphQl Endpoint: https://copper.coypu.org/coypu/graphql
 
 * Example Queries: https://docs.coypu.org/SparqlSampleQueries.html
 * Full Documentation: https://docs.coypu.org
+
+## SPARQL Interface
 
 ### CURL Usage
 
@@ -107,8 +110,29 @@ SELECT ?graph ?geom ?geomColor ?geomTooltip (?geomTooltip AS ?geomLabel) {
 
 </details>
 
-### Notes
+## GraphQL Interface
+
+```graphql
+{
+  graphs @pattern(of: "GRAPH ?g { }") @pretty
+}
+```
+
+```json
+{
+  "data": {
+    "graphs": [
+      "http://www.example.org/xg",
+      "http://www.example.org/yg"
+    ]
+  },
+  "errors": []
+}
+```
+
+## Notes
 * *Named Graph* is essentially a dataset name.
 * [Fuseki](https://jena.apache.org/documentation/fuseki2/) is a framework for hosting services over RDF data. It is a component of the [Apache Jena](https://github.com/apache/jena) Semantic Web framework.
 * *Coypu* is the name of the project ([Website](https://coypu.org/)) in which the Fuseki server and the data loading pipelines were set up. We plan to keep the server running for at least a few more years (status from 2024-12-19).
+
 
