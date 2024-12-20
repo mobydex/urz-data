@@ -10,6 +10,8 @@
 * Example Queries: https://docs.coypu.org/SparqlSampleQueries.html
 * Full Documentation: https://docs.coypu.org
 
+* Dataset List URZ: https://datasets.coypu.org/
+
 ## SPARQL Interface
 
 ### CURL Usage
