@@ -1,10 +1,12 @@
 
 # Data Services
+The data infrastructure reuses that of the former Coypu project.
 
 ## Summary
 
 * Fuseki Server: https://copper.coypu.org/
-* SPARQL Endpoint: https://copper.coypu.org/coypu
+* MobyDex SPARQL Endpoint: https://copper.coypu.org/mobydex
+* Coypu SPARQL Endpoint: https://copper.coypu.org/coypu
 * GraphQl Endpoint: https://copper.coypu.org/coypu/graphql
 
 * Example Queries: https://docs.coypu.org/SparqlSampleQueries.html
@@ -74,6 +76,9 @@ curl https://copper.coypu.org/coypu --data-urlencode \
 
 </details>
 
+### Summary
+
+* [Types and instance counts in the pilot region](https://api.triplydb.com/s/4a6GHLgiA)
 
 ### Visualize Query Results with Yasgui
 
