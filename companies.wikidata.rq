@@ -22,6 +22,7 @@ INSERT {
 WHERE {
   GRAPH ?x {
     ?s <http://www.wikidata.org/prop/direct/P625> ?o
+    FILTER(isLiteral(?o)) # Important to avoid illegal geometries or jena-geosparql might fail to index.
     BIND(IRI(STR(?s) + "/geometry") AS ?g)
   }
 }
