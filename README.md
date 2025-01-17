@@ -2,9 +2,9 @@
 # Data Services
 The data infrastructure reuses that of the former Coypu project.
 
-## Unsorted
+## Relevant Note
 
-* API for Marcus' API: https://mobydex.locoslab.com/controller-service/
+* API for Marcus' API: https://mobydex.locoslab.com/controller-service/ (this should be documented on Locoslab page)
 
 ## Summary
 
