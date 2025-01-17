@@ -14,17 +14,18 @@ WHERE {
 # Infer spatial triples
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 INSERT {
-  GRAPH ?g {
+  GRAPH ?x {
     ?s geo:hasGeometry ?g .
     ?g geo:asWKT ?o .
   }
 }
 WHERE {
-  GRAPH ?g {
+  GRAPH ?x {
     ?s <http://www.wikidata.org/prop/direct/P625> ?o
     BIND(IRI(STR(?s) + "/geometry") AS ?g)
   }
 }
+
 
 
 
