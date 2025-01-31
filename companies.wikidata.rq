@@ -1,0 +1,48 @@
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+CONSTRUCT { ?s ?p ?o }
+WHERE {
+  ?s wdt:P31/wdt:P279* wd:Q4830453 ;
+            wdt:P17 wd:Q183 ;          # wdt:P276 ?location;           # Location
+            wdt:P625 ?geom .               # Location
+          # wdt:P452 ?companyType.        # Industry type or business sector
+  ?s ?p ?o .
+  BIND(lang(?o) AS ?l)
+  FILTER(IF(bound(?l), ?l IN ('en', 'de'), true))
+}
+
+# Infer spatial triples
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+INSERT {
+  GRAPH ?x {
+    ?s geo:hasGeometry ?g .
+    ?g geo:asWKT ?o .
+  }
+}
+WHERE {
+  GRAPH ?x {
+    ?s <http://www.wikidata.org/prop/direct/P625> ?o
+    FILTER(isLiteral(?o)) # Important to avoid illegal geometries or jena-geosparql might fail to index.
+    BIND(IRI(STR(?s) + "/geometry") AS ?g)
+  }
+}
+
+
+
+
+
+
+# chatgpt 4o: "please generate a sparql query for wikidata that retrieves basic information about companies (type, name, location) within germany."
+
+SELECT ?company ?companyLabel ?companyType ?companyTypeLabel ?location ?locationLabel
+WHERE {
+  ?company wdt:P31 wd:Q4830453;          # Instance of 'business'
+          wdt:P17 wd:Q183;              # Country is Germany
+          wdt:P276 ?location;           # Location
+          wdt:P452 ?companyType.        # Industry type or business sector
+  
+  SERVICE wikibase:label {              # Fetch labels for items
+    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en".
+  }
+}
+LIMIT 100
