@@ -1,0 +1,34 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX norse: <https://w3id.org/aksw/norse#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX spatial: <http://jena.apache.org/spatial#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+SELECT ?graph ?geom ?cnt ?colorValue ?geomColor ?geomTooltip (?geomTooltip AS ?geomLabel) {
+  SERVICE <cache:> {
+  VALUES ?polygon {
+    "POLYGON ((6.475457372470345 51.7037981703763, 6.475457372470346 51.2481032780451, 7.544268491722988 51.24810327804511, 7.544268491722988 51.70379817037631, 6.475457372470345 51.7037981703763))"^^geo:wktLiteral
+  }
+  LATERAL {
+    # Use spatial:intersectBoxGeom for indexed lookup of candidates by BBOX
+    # then filter by exact polygon using geof:sfIntersects
+    { SELECT ?polygon ?cellId (COUNT(*) AS ?cnt) {
+      GRAPH <https://data.coypu.org/infrastructure/parking/> {
+        ?x spatial:intersectBoxGeom(?polygon) .
+        ?x geo:hasGeometry/geo:asWKT ?geom .
+        FILTER(geof:sfIntersects(?geom, ?polygon))
+      }
+      BIND(norse:h3.cells(?geom, 7, true) AS ?cellIds)
+      ?cellIds <http://jsa.aksw.org/fn/array/unnest> ?cellId
+    } GROUP BY ?polygon ?cellId }
+  }
+  BIND(norse:h3.cellToPolygon(?cellId) AS ?geom)
+  }
+
+  BIND(?cnt / 3000 AS ?colorValueRaw)
+  BIND(xsd:int(IF(?colorValueRaw > 1, 1, ?colorValueRaw) * 255) AS ?colorValue)
+  BIND("rgb(" + STR(?colorValue) + ", 0, 0)" AS ?geomColor)
+  BIND(STR(?cnt) AS ?geomTooltip)
+}
+
