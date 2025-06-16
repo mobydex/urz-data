@@ -5,6 +5,9 @@ The data infrastructure reuses that of the former Coypu project.
 ## Relevant Note
 
 * API for Marcus' API: https://mobydex.locoslab.com/controller-service/ (this should be documented on Locoslab page)
+* Cells API: https://mobydex.locoslab.com/controller-service/projects/2/cells.json
+* Computations API: https://mobydex.locoslab.com/controller-service/projects/2/computations.json
+* Directions API: https://mobydex.locoslab.com/controller-service/computations/19/directions?origins=271&destinations=272&routes=true
 
 ## Summary
 
