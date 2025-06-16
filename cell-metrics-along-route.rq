@@ -1,0 +1,53 @@
+# https://api.triplydb.com/s/p7nNtaOIW
+
+PREFIX coy: <https://schema.coypu.org/global#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX norse: <https://w3id.org/aksw/norse#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX spatial: <http://jena.apache.org/spatial#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+SELECT ?routeGeom ?routeCellGeom ?routeCellGeomColor ?routeCellGeomColor ?routeCellGeomTooltip (?routeCellGeomTooltip AS ?routeCellGeomLabel)
+{
+  # The pilot area  
+  VALUES ?pilotAreaGeom {
+    "POLYGON ((6.475457372470345 51.7037981703763, 6.475457372470346 51.2481032780451, 7.544268491722988 51.24810327804511, 7.544268491722988 51.70379817037631, 6.475457372470345 51.7037981703763))"^^geo:wktLiteral
+  }
+
+  # Find routes of a certain type in the pilot area
+  SERVICE <loop:https://copper.coypu.org/coypu/> { # loop: causes pilotArea to become federated  without having to project it
+    SELECT ?route ?routeGeom {
+      ?route spatial:intersectBoxGeom(?pilotAreaGeom) .
+      ?route geo:hasGeometry/geo:asWKT ?routeGeom .
+      ?route a coy:RailwaySegment .
+      FILTER(geof:sfIntersects(?routeGeom, ?pilotAreaGeom))
+    } LIMIT 1000
+  }
+  
+  # Map the routes to h3 grid cells
+  BIND(norse:h3.cells(?routeGeom, 7, true) AS ?routeCellIds)
+  ?routeCellIds <http://jsa.aksw.org/fn/array/unnest> ?routeCellId
+  BIND(norse:h3.cellToPolygon(?routeCellId) AS ?routeCellGeom)
+
+  # Compute metrics for each cell
+  SERVICE <loop:cache:> {
+    # Use spatial:intersectBoxGeom for indexed lookup of candidates by BBOX
+    # then filter by exact polygon using geof:sfIntersects
+    { SELECT ?routeCellId ?routeCellGeom (COUNT(*) AS ?cnt) {
+      GRAPH <https://data.coypu.org/infrastructure/parking/> {
+        ?poi spatial:intersectBoxGeom(?routeCellGeom) .
+        ?poi geo:hasGeometry/geo:asWKT ?poiGeom .
+        FILTER(geof:sfIntersects(?poiGeom, ?routeCellGeom))
+      }
+    } GROUP BY ?routeCellId ?routeCellGeom }
+  }
+  
+  # Compute colors for presentation
+  BIND(?cnt / 3000 AS ?colorValueRaw)
+  BIND(xsd:int(IF(?colorValueRaw > 1, 1, ?colorValueRaw) * 255) AS ?colorValue)
+  BIND("rgb(" + STR(?colorValue) + ", 0, 0)" AS ?routeCellGeomColor)
+  BIND(STR(?cnt) AS ?routeCellGeomTooltip)
+}
+
+
