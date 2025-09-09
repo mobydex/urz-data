@@ -1,0 +1,27 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX osmt: <https://www.openstreetmap.org/wiki/Key:>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?s ?wkt ?wktColor ?wktLabel WHERE {
+#  GRAPH <https://data.mobydex.org/infrastructure/railway/> { 
+    ?s osmt:railway "station" .
+    ?s geo:hasGeometry ?geom .    
+    ?geom geo:asWKT ?wkt .
+    OPTIONAL { ?s osmt:wheelchair ?wheelchair }
+    OPTIONAL { ?s osmt:name ?label }
+    OPTIONAL { ?s osmt:railway ?railway }
+#  }
+  
+  BIND(if(!bound(?wheelchair), "black",
+         if(?wheelchair = "yes", "green",
+           if(?wheelchair = "no", "red", "orange"))) AS ?wktColor)
+  
+  # create tooltip
+  BIND(strdt(concat(
+    '<h4>', STR(coalesce(?label, ?s)), '</h4>',
+    '<a href="', STR(?s), '" target="_blank">', STR(?s), '</a>',
+    '<p><b>Wheelchair</b> ',str(coalesce(?wheelchair, 'not set')), '</p>',
+    '<p><b>Railway</b> ',str(coalesce(?railway, 'not set')), '</p>'
+  ), rdf:HTML) as ?wktLabel)
+}
+
