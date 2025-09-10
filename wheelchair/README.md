@@ -1,3 +1,14 @@
+## Accessibility Data
+
+### Trainstations + Wheelchair Accessibility
+
+<img width="928" height="1151" alt="image" src="https://github.com/user-attachments/assets/8b52fd7d-67a4-47f8-b1bc-7da9ea14cf83" />
+
+* YasGui Link: https://api.triplydb.com/s/DA90SQxJm
+
+## Data Generation
+
+This section documents how the RDF data was generated.
 
 ### Download OSM data
 
