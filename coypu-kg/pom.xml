@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.aksw.data.config</groupId>
+    <artifactId>aksw-data-deployment</artifactId>
+    <version>0.0.8</version>
+    <relativePath></relativePath>
+  </parent>
+
+  <groupId>org.aksw.data.coypu.kg</groupId>
+  <artifactId>coypu-kg-20231231</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.aksw.maven.plugins</groupId>
+        <artifactId>tdb2-maven-plugin</artifactId>
+        <version>0.0.3-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <configuration>
+              <sources>
+                <source>
+                  <dependency>
+                    <groupId>org.aksw.data.coypu.infrastructure.powerplants</groupId>
+                    <artifactId>powerplants-20230223</artifactId>
+                    <version>1.0.0</version>
+                    <type>nt.bz2</type>
+                  </dependency>
+                  <graphs>
+                    <graph>https://data.coypu.org/infrastructure/powerplants/</graph>
+                  </graphs>
+                </source>
+
+                <source>
+                  <dependency>
+                    <groupId>org.aksw.data.coypu.infrastructure.ports</groupId>
+                    <artifactId>ports-20231019</artifactId>
+                    <version>1.0.0</version>
+                    <type>ttl.bz2</type>
+                  </dependency>
+                  <graphs>
+                    <graph>https://data.coypu.org/infrastructure/ports/</graph>
+                  </graphs>
+                </source>
+
+                <source>
+                  <dependency>
+                    <groupId>org.aksw.data.coypu.infrastructure.airports</groupId>
+                    <artifactId>airports-20231013</artifactId>
+                    <version>1.0.0</version>
+                    <type>ttl.bz2</type>
+                  </dependency>
+                  <graphs>
+                    <graph>https://data.coypu.org/infrastructure/airports/</graph>
+                  </graphs>
+                </source>
+
+                <source>
+                  <dependency>
+                    <groupId>org.aksw.data.coypu.infrastructure.climatetrace</groupId>
+                    <artifactId>climatetrace-20230131</artifactId>
+                    <version>1.0.0</version>
+                    <type>ttl.gz</type>
+                  </dependency>
+                  <graphs>
+                    <graph>https://data.coypu.org/infrastructure/climatetrace/</graph>
+                  </graphs>
+                </source>
+
+              </sources>
+            </configuration>
+            <goals>
+              <goal>load</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
