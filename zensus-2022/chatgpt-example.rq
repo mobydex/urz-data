@@ -1,0 +1,28 @@
+PREFIX eg: <http://www.example.org/>
+CONSTRUCT {
+  ?s
+    a eg:Record ;
+    eg:gitterId ?GITTER_ID_100m ;
+    eg:ars ?ARS ;
+    eg:inhabitants ?inhabitants ;
+    eg:foreignersRatio ?foreignersRatio ;
+    eg:avgAge ?avgAge ;
+    eg:ageRange_0_18 ?Personen_unter_18_Jahren ;
+    eg:ageRange_18_29 ?Personen_18___29_Jahre ;
+    eg:ageRange_30_49 ?Personen_30___49_Jahre ;
+    eg:ageRange_50-64 ?Personen_50___64_Jahre ;
+    eg:ageRange_65    ?Personen_65_Jahre_und__lter ;
+    #Anteil der unter 18-Jährigen,Anteil der ab 65-Jährigen
+    .
+
+# id,GITTER_ID_100m,ARS,Einwohner,Ausländeranteil,Durchschnittsalter,Personen unter 18 Jahren,Personen 18 - 29 Jahre,Personen 30 - 49 Jahre,Personen 50 - 64 Jahre,Personen 65 Jahre und älter,Anteil der unter 18-Jährigen,Anteil der ab 65-Jährigen,Durchschnittliche Haushaltsgröße,Durchschnittliche Nettokaltmiete/qm,Durchschnittliche Fläche je Wohnung ,Durchschnittliche Fläche je Bewohner,Eigentümerquote,Leerstandsquote,Markaktive Leerstandsquote,Energieträger insgesamt,Gas,Heizöl,Holz/Holzpellets,Biomasse/Biogas,Solar/Geothermie/Wärmepumpe,Strom,Kohle,Fernwärme,kein Energieträger,Heizungsart insgesamt,Fernheizung,Etagenheizung,Blockheizung,Zentralheizung,Einzel-/ Mehrraumöfen,keine Heizung,Gebäude insgesamt,Gebäude vor 1919,Gebäude ab 1919 bis 1948,Gebäude ab 1949 bis 1978,Gebäude ab 1979 bis 1990,Gebäude ab 1991 bis 2000,Gebäude ab 2001 bis 2010,Gebäude ab 2011 bis 2019,Gebäude ab 2020 und später,Shape__Area,Shape__Length
+
+}
+{
+  BIND(iri(concat(str(eg:), ?OBJECTID)) AS ?s)
+  BIND(xsd:decimal(?Einwohner) AS ?inhabitants)
+  BIND(xsd:decimal(?Ausl_nderanteil) AS ?foreignersRatio)
+  BIND(xsd:decimal(?Durchschnittsalter) AS ?avgAge)
+  
+}
+

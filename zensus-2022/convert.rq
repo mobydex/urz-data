@@ -1,0 +1,116 @@
+PREFIX eg:  <http://www.example.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+  ?s
+    a eg:Record ;
+    eg:gridCellId ?GITTER_ID_100m ;
+    eg:ars ?ARS ;
+    eg:inhabitants ?inhabitants ;
+    eg:foreignersRatio ?foreignersRatio ;
+    eg:averageAge ?averageAge ;
+    eg:personsUnder18 ?personsUnder18 ;
+    eg:persons18To29 ?persons18To29 ;
+    eg:persons30To49 ?persons30To49 ;
+    eg:persons50To64 ?persons50To64 ;
+    eg:persons65Plus ?persons65Plus ;
+    eg:shareUnder18 ?shareUnder18 ;
+    eg:share65Plus ?share65Plus ;
+    eg:averageHouseholdSize ?averageHouseholdSize ;
+    eg:averageNetColdRentPerSqm ?averageNetColdRentPerSqm ;
+    eg:averageAreaPerDwelling ?averageAreaPerDwelling ;
+    eg:averageAreaPerResident ?averageAreaPerResident ;
+    eg:ownerOccupancyRate ?ownerOccupancyRate ;
+    eg:vacancyRate ?vacancyRate ;
+    eg:marketActiveVacancyRate ?marketActiveVacancyRate ;
+    eg:energyCarrierTotal ?energyCarrierTotal ;
+    eg:gas ?gas ;
+    eg:heatingOil ?heatingOil ;
+    eg:woodPellets ?woodPellets ;
+    eg:biomassBiogas ?biomassBiogas ;
+    eg:solarGeothermalHeatPump ?solarGeothermalHeatPump ;
+    eg:electricity ?electricity ;
+    eg:coal ?coal ;
+    eg:districtHeating ?districtHeating ;
+    eg:noEnergyCarrier ?noEnergyCarrier ;
+    eg:heatingTypeTotal ?heatingTypeTotal ;
+    eg:heatingDistrict ?heatingDistrict ;
+    eg:heatingFloor ?heatingFloor ;
+    eg:heatingBlock ?heatingBlock ;
+    eg:heatingCentral ?heatingCentral ;
+    eg:heatingIndividualRoomStoves ?heatingIndividualRoomStoves ;
+    eg:noHeating ?noHeating ;
+    eg:buildingsTotal ?buildingsTotal ;
+    eg:buildingsPre1919 ?buildingsPre1919 ;
+    eg:buildings1919To1948 ?buildings1919To1948 ;
+    eg:buildings1949To1978 ?buildings1949To1978 ;
+    eg:buildings1979To1990 ?buildings1979To1990 ;
+    eg:buildings1991To2000 ?buildings1991To2000 ;
+    eg:buildings2001To2010 ?buildings2001To2010 ;
+    eg:buildings2011To2019 ?buildings2011To2019 ;
+    eg:buildings2020Plus ?buildings2020Plus ;
+    eg:shapeArea ?shapeArea ;
+    eg:shapeLength ?shapeLength ;
+    .
+}
+WHERE {
+  # Subject aus id bauen
+  BIND( iri(concat(str(eg:), ?id)) AS ?s )
+
+  # Kennungen (ohne Decimal-Cast)
+  #   Hinweis: Header-Sonderzeichen sind bereits zu "_" normalisiert
+  #   z.B. "GITTER_ID_100m" -> ?GITTER_ID_100m
+  #        "ARS"            -> ?ARS
+
+  # Zahlen/Floats/Quoten als xsd:decimal
+  BIND( xsd:decimal(?Einwohner)                             AS ?inhabitants )
+  BIND( xsd:decimal(?Ausl_nderanteil)                       AS ?foreignersRatio )
+  BIND( xsd:decimal(?Durchschnittsalter)                    AS ?averageAge )
+  BIND( xsd:decimal(?Personen_unter_18_Jahren)              AS ?personsUnder18 )
+  BIND( xsd:decimal(?Personen_18_29_Jahre)                  AS ?persons18To29 )
+  BIND( xsd:decimal(?Personen_30_49_Jahre)                  AS ?persons30To49 )
+  BIND( xsd:decimal(?Personen_50_64_Jahre)                  AS ?persons50To64 )
+  BIND( xsd:decimal(?Personen_65_Jahre_und__lter)           AS ?persons65Plus )
+  BIND( xsd:decimal(?Anteil_der_unter_18_J_hrigen)          AS ?shareUnder18 )
+  BIND( xsd:decimal(?Anteil_der_ab_65_J_hrigen)             AS ?share65Plus )
+  BIND( xsd:decimal(?Durchschnittliche_Haushaltsgr__e)      AS ?averageHouseholdSize )
+  BIND( xsd:decimal(?Durchschnittliche_Nettokaltmiete_qm)   AS ?averageNetColdRentPerSqm )
+  BIND( xsd:decimal(?Durchschnittliche_Fl_che_je_Wohnung)   AS ?averageAreaPerDwelling )
+  BIND( xsd:decimal(?Durchschnittliche_Fl_che_je_Bewohner)  AS ?averageAreaPerResident )
+  BIND( xsd:decimal(?Eigent_merquote)                       AS ?ownerOccupancyRate )
+  BIND( xsd:decimal(?Leerstandsquote)                       AS ?vacancyRate )
+  BIND( xsd:decimal(?Markaktive_Leerstandsquote)            AS ?marketActiveVacancyRate )
+
+  BIND( xsd:decimal(?Energietr_ger_insgesamt)               AS ?energyCarrierTotal )
+  BIND( xsd:decimal(?Gas)                                   AS ?gas )
+  BIND( xsd:decimal(?Heiz_l)                                AS ?heatingOil )
+  BIND( xsd:decimal(?Holz_Holzpellets)                      AS ?woodPellets )
+  BIND( xsd:decimal(?Biomasse_Biogas)                       AS ?biomassBiogas )
+  BIND( xsd:decimal(?Solar_Geothermie_W_rmepumpe)           AS ?solarGeothermalHeatPump )
+  BIND( xsd:decimal(?Strom)                                 AS ?electricity )
+  BIND( xsd:decimal(?Kohle)                                 AS ?coal )
+  BIND( xsd:decimal(?Fernw_rme)                             AS ?districtHeating )
+  BIND( xsd:decimal(?kein_Energietr_ger)                    AS ?noEnergyCarrier )
+
+  BIND( xsd:decimal(?Heizungsart_insgesamt)                 AS ?heatingTypeTotal )
+  BIND( xsd:decimal(?Fernheizung)                           AS ?heatingDistrict )
+  BIND( xsd:decimal(?Etagenheizung)                         AS ?heatingFloor )
+  BIND( xsd:decimal(?Blockheizung)                          AS ?heatingBlock )
+  BIND( xsd:decimal(?Zentralheizung)                        AS ?heatingCentral )
+  BIND( xsd:decimal(?Einzel__Mehrraum_fen)                  AS ?heatingIndividualRoomStoves )
+  BIND( xsd:decimal(?keine_Heizung)                         AS ?noHeating )
+
+  BIND( xsd:decimal(?Geb_ude_insgesamt)                     AS ?buildingsTotal )
+  BIND( xsd:decimal(?Geb_ude_vor_1919)                      AS ?buildingsPre1919 )
+  BIND( xsd:decimal(?Geb_ude_ab_1919_bis_1948)              AS ?buildings1919To1948 )
+  BIND( xsd:decimal(?Geb_ude_ab_1949_bis_1978)              AS ?buildings1949To1978 )
+  BIND( xsd:decimal(?Geb_ude_ab_1979_bis_1990)              AS ?buildings1979To1990 )
+  BIND( xsd:decimal(?Geb_ude_ab_1991_bis_2000)              AS ?buildings1991To2000 )
+  BIND( xsd:decimal(?Geb_ude_ab_2001_bis_2010)              AS ?buildings2001To2010 )
+  BIND( xsd:decimal(?Geb_ude_ab_2011_bis_2019)              AS ?buildings2011To2019 )
+  BIND( xsd:decimal(?Geb_ude_ab_2020_und_sp_ter)            AS ?buildings2020Plus )
+
+  BIND( xsd:decimal(?Shape__Area)                           AS ?shapeArea )
+  BIND( xsd:decimal(?Shape__Length)                         AS ?shapeLength )
+}
+
