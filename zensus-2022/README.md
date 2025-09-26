@@ -1,10 +1,18 @@
 
 # Zensus Data in RDF
 
+## RDFData
+
 <img width="3957" height="1618" alt="image" src="https://github.com/user-attachments/assets/2d022dad-6bd0-437a-a7c0-8782d6345cc2" />
 
-Example Query: https://api.triplydb.com/s/NMRzNz68_
+* Example Query: https://api.triplydb.com/s/NMRzNz68_
+* SPARQL Endpoint: https://data.aksw.org/mobydex - `graph <https://data.aksw.org/zensus/2022/>`
 
+## Raw Resources
+
+* Link zum Zensusatlas: https://atlas.zensus2022.de/
+* https://ergebnisse.zensus2022.de/datenbank/online/
+* Download: https://plattform-npgeo-vfdb.hub.arcgis.com/datasets/esri-de-content::zensus-2022-gitterzellen/explore?layer=0&location=50.319172%2C11.799323%2C5.81
 
 ## Conversion
 
@@ -12,10 +20,6 @@ Used Process:
 * Created small manuall mapping example
 * Used ChatGPT 5o to complete the mapping based on the example
 * A bit of manual cleanup and adjustments - e.g. chatgpt also got the coordinate order (x, y) wrong
-
-* Link zum Zensusatlas: https://atlas.zensus2022.de/
-* https://ergebnisse.zensus2022.de/datenbank/online/
-* Download: https://plattform-npgeo-vfdb.hub.arcgis.com/datasets/esri-de-content::zensus-2022-gitterzellen/explore?layer=0&location=50.319172%2C11.799323%2C5.81
 
 ChatGPT Prompt:
 
