@@ -6,7 +6,29 @@
 <img width="3957" height="1618" alt="image" src="https://github.com/user-attachments/assets/2d022dad-6bd0-437a-a7c0-8782d6345cc2" />
 
 * Example Query: https://api.triplydb.com/s/NMRzNz68_
-* SPARQL Endpoint: https://data.aksw.org/mobydex - `graph <https://data.aksw.org/zensus/2022/>`
+* SPARQL Endpoint: https://data.aksw.org/mobydex - `GRAPH <https://data.aksw.org/zensus/2022/>`
+
+```sparql
+PREFIX spatialF: <http://jena.apache.org/spatial#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?s ?wkt WHERE {
+  VALUES ?area {
+    "POLYGON ((6.475457372470345 51.7037981703763, 6.475457372470346 51.2481032780451, 7.544268491722988 51.24810327804511, 7.544268491722988 51.70379817037631, 6.475457372470345 51.7037981703763))"^^geo:wktLiteral
+  }
+  LATERAL {
+    GRAPH <https://data.aksw.org/zensus/2022/> {
+      ?s spatialF:intersectBoxGeom(?area) .
+      ?s geo:hasGeometry/geo:asWKT ?wkt .    
+      FILTER(!bound(?area) || geof:sfIntersects(?wkt, ?area))
+    }
+  }
+}
+LIMIT 10000
+```
 
 ## Raw Resources
 
