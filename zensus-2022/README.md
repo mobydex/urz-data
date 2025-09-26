@@ -39,9 +39,15 @@ LIMIT 10000
 ## Conversion
 
 Used Process:
-* Created small manuall mapping example
+* Created small manual `tarql` mapping example
 * Used ChatGPT 5o to complete the mapping based on the example
 * A bit of manual cleanup and adjustments - e.g. chatgpt also got the coordinate order (x, y) wrong
+
+RDF conversion carried out using [RDF Processing Toolkit](https://github.com/Scaseco/RdfProcessingToolkit):
+
+```
+rpt sansa tarql convert.tarql Zensus2022_grid_final_-8930378907585662449.csv --out-file zensus2022.ttl --out-overwrite
+```
 
 ChatGPT Prompt:
 
