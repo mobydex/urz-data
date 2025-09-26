@@ -5,7 +5,7 @@
 
 <img width="3957" height="1618" alt="image" src="https://github.com/user-attachments/assets/2d022dad-6bd0-437a-a7c0-8782d6345cc2" />
 
-* Example Query: https://api.triplydb.com/s/NMRzNz68_
+* [Example Query](https://api.triplydb.com/s/NMRzNz68_)
 * SPARQL Endpoint: https://data.aksw.org/mobydex - `GRAPH <https://data.aksw.org/zensus/2022/>`
 
 ```sparql
