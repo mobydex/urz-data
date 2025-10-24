@@ -1,0 +1,92 @@
+
+# https://osmcode.org/osmium-tool/manual.html#filtering-by-tags
+
+
+  # 1. residential \
+  building=residential,apartments,house,detached,terrace \
+\
+  # 2. shopping / retail \
+  shop=supermarket,convenience,greengrocer,bakery,butcher,dairy \
+  shop=chemist,cosmetics amenity=pharmacy \
+\
+  # 3. health care \
+  amenity=doctors,dentist,hospital healthcare=hospital \
+  social_facility=nursing_home, amenity=social_facility \
+\
+  # 4. education & child care \
+  amenity=kindergarten, amenity=childcare amenity=school amenity=college, amenity=university amenity=library \
+\
+  # 5. Work \
+  amenity=coworking_space \
+\
+  # 6. Leisure, Sport & Culture \
+  leisure=park \
+  amenity=cinema,theatre \
+  amenity=restaurant,cafe,bar,fast_food,pub \
+\
+  # 7. Public Transport \
+  highway=bus_stop public_transport=platform railway=station public_transport=stop_position amenity=bus_station railway=halt light_rail=station subway=station tram=station \
+  
+
+
+-----------------------------------------------------------------------
+
+Drogerie
+shop=chemist amenity=pharmacy shop=cosmetics
+
+Allgemeiner Einzelhandel
+shop=department_store shop=variety_store shop=discount shop=kiosk
+
+Wochenmarkt
+amenity=marketplace
+
+
+3. Health
+
+Arztpraxis	amenity=doctors
+Zahnarzt	amenity=dentist
+Krankenhaus	amenity=hospital, healthcare=hospital
+Klinik / Spezialzentrum	healthcare=* (z. B. healthcare=clinic, healthcare=laboratory)
+Pflegeeinrichtung	social_facility=nursing_home, amenity=social_facility
+Apotheke	amenity=pharmacy
+
+
+
+🎓 4. Bildung & Kinderbetreuung
+Kategorie	Tags
+Kindergarten	amenity=kindergarten, amenity=childcare
+Schule	amenity=school
+Hochschule	amenity=college, amenity=university
+Bibliothek	amenity=library
+Nachhilfe / Lernort	amenity=tutoring, amenity=community_centre
+
+
+
+🎭 6. Freizeit, Sport & Kultur
+Kategorie	Tags
+Park / Grünfläche	leisure=park, landuse=grass, landuse=allotments
+Spielplatz	leisure=playground
+Sportplatz / Fitness	leisure=pitch, sport=*, leisure=fitness_centre, leisure=swimming_pool
+Kino / Theater	amenity=cinema, amenity=theatre
+Museum / Kulturzentrum	tourism=museum, amenity=arts_centre, amenity=community_centre
+Gastronomie	amenity=restaurant, amenity=cafe, amenity=bar, amenity=fast_food, amenity=pub
+
+
+
+
+
+
+Park / Grünfläche	leisure=park, landuse=grass, landuse=allotments
+Spielplatz	leisure=playground
+Sportplatz / Fitness	leisure=pitch, sport=*, leisure=fitness_centre, leisure=swimming_pool
+Kino / Theater	amenity=cinema, amenity=theatre
+Museum / Kulturzentrum	tourism=museum, amenity=arts_centre, amenity=community_centre
+Gastronomie	amenity=restaurant, amenity=cafe, amenity=bar, amenity=fast_food, amenity=pub
+
+
+
+7. Public Transport
+
+highway=bus_stop public_transport=platform railway=station public_transport=stop_position amenity=bus_station railway=halt light_rail=station subway=station tram=station
+
+
