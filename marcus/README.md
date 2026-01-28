@@ -1,4 +1,42 @@
 
+[SPARQL Example - Aggregate per grid cell](https://yasgui.aksw.org/#query=PREFIX%20spatialF%3A%20%3Chttp%3A%2F%2Fjena.apache.org%2Fspatial%23%3E%0APREFIX%20geof%3A%20%3Chttp%3A%2F%2Fwww.opengis.net%2Fdef%2Ffunction%2Fgeosparql%2F%3E%0APREFIX%20geo%3A%20%3Chttp%3A%2F%2Fwww.opengis.net%2Font%2Fgeosparql%23%3E%0APREFIX%20rdf%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0APREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0A%0ASELECT%20%3Fcell1Wkt%20%3Fcell1WktColor%20%3Fcell2Wkt%20%3Fcell2WktColor%20%3Fcount%20WHERE%20%7B%0A%20%20BIND(%22blue%22%20AS%20%3Fcell1WktColor)%0A%20%20BIND(%22red%22%20AS%20%3Fcell2WktColor)%0A%20%20VALUES%20%3FareaWkt%20%7B%0A%20%20%20%20%22POLYGON%20((6.475457372470345%2051.7037981703763%2C%206.475457372470346%2051.2481032780451%2C%207.544268491722988%2051.24810327804511%2C%207.544268491722988%2051.70379817037631%2C%206.475457372470345%2051.7037981703763))%22%5E%5Egeo%3AwktLiteral%0A%20%20%7D%0A%20%20LATERAL%20%7B%0A%20%20%20%20SELECT%20%3FareaWkt%20%3Fcell1Wkt%20(geof%3Acollect(%3Fcell2MemberWkt)%20AS%20%3Fcell2Wkt)%20(COUNT(*)%20AS%20%3Fcount)%0A%20%20%20%20%7B%0A%20%20%20%20%20%20%7B%20SELECT%20*%20%7B%0A%20%20%20%20%20%20%20%20GRAPH%20%3Chttps%3A%2F%2Fdata.aksw.org%2Fzensus%2F2022%2F%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%3Fcell1%20spatialF%3AintersectBoxGeom(%3FareaWkt)%20.%0A%20%20%20%20%20%20%20%20%20%20%3Fcell1%20geo%3AhasGeometry%2Fgeo%3AasWKT%20%3Fcell1Wkt%20.%0A%20%20%20%20%20%20%20%20%20%20FILTER(!bound(%3FareaWkt)%20%7C%7C%20geof%3AsfIntersects(%3Fcell1Wkt%2C%20%3FareaWkt))%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%20LIMIT%201000%20%7D%0A%20%20%20%20%20%20%23%20LATERAL%20%7B%0A%20%20%20%20%20%20SERVICE%20%3Cloop%3Aconcurrent%2B10-1%3Abulk%2B1%3A%3E%20%7B%0A%20%20%20%20%20%20%20%20GRAPH%20%3Chttps%3A%2F%2Fdata.mobydex.org%2Fosm%2F20250903%2F15mincity%2F%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%3Fcell2%20spatialF%3AintersectBoxGeom(%3Fcell1Wkt)%20.%0A%20%20%20%20%20%20%20%20%20%20%3Fcell2%20geo%3AhasGeometry%2Fgeo%3AasWKT%20%3Fcell2MemberWkt%20.%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%20GROUP%20BY%20%3FareaWkt%20%3Fcell1Wkt%0A%20%20%7D%0A%7D%0A&endpoint=https%3A%2F%2Fdata.aksw.org%2Fmobydex&requestMethod=POST&tabTitle=Query%201&headers=%7B%7D&contentTypeConstruct=application%2Fn-triples%2C*%2F*%3Bq%3D0.9&contentTypeSelect=application%2Fsparql-results%2Bjson%2C*%2F*%3Bq%3D0.9&outputFormat=geo&outputSettings=%7B%7D)
+
+```sparql
+PREFIX spatialF: <http://jena.apache.org/spatial#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?cell1Wkt ?cell1WktColor ?cell2Wkt ?cell2WktColor ?count WHERE {
+  BIND("blue" AS ?cell1WktColor)
+  BIND("red" AS ?cell2WktColor)
+  VALUES ?areaWkt {
+    "POLYGON ((6.475457372470345 51.7037981703763, 6.475457372470346 51.2481032780451, 7.544268491722988 51.24810327804511, 7.544268491722988 51.70379817037631, 6.475457372470345 51.7037981703763))"^^geo:wktLiteral
+  }
+  LATERAL {
+    SELECT ?areaWkt ?cell1Wkt (geof:collect(?cell2MemberWkt) AS ?cell2Wkt) (COUNT(*) AS ?count)
+    {
+      { SELECT * {
+        GRAPH <https://data.aksw.org/zensus/2022/> {
+          ?cell1 spatialF:intersectBoxGeom(?areaWkt) .
+          ?cell1 geo:hasGeometry/geo:asWKT ?cell1Wkt .
+          FILTER(!bound(?areaWkt) || geof:sfIntersects(?cell1Wkt, ?areaWkt))
+        }
+      } LIMIT 1000 }
+      # LATERAL {
+      SERVICE <loop:concurrent+10-1:bulk+1:> {
+        GRAPH <https://data.mobydex.org/osm/20250903/15mincity/> {
+          ?cell2 spatialF:intersectBoxGeom(?cell1Wkt) .
+          ?cell2 geo:hasGeometry/geo:asWKT ?cell2MemberWkt .
+        }
+      }
+    } GROUP BY ?areaWkt ?cell1Wkt
+  }
+}
+```
+
+
 [SPARQL Example - Bulk Polygon Request Example](https://api.triplydb.com/s/T-SZYko7d)
 
 ```sparql
