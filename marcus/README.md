@@ -10,7 +10,7 @@ SELECT * WHERE {
 LIMIT 1000
 ```
 
-[List available types - via scanning (a sample of) instances](https://yasgui.triply.cc/#query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20*%20WHERE%20%7B%0A%20%20SERVICE%20%3CAcache%3A%3E%20%7B%20%7B%20SELECT%20DISTINCT%20%3Ftype%20%7B%20%3Fs%20a%20%3Ftype%20%7D%20LIMIT%2010000%20%7D%20%7D%0A%20%20OPTIONAL%20%7B%20%3Ftype%20rdfs%3Alabel%20%3Fl%20%7D%0A%7D%0ALIMIT%201000&endpoint=https%3A%2F%2Fdata.aksw.org%2Fmobydex&requestMethod=POST&tabTitle=Query%201&headers=%7B%7D&contentTypeConstruct=application%2Fn-triples%2C*%2F*%3Bq%3D0.9&contentTypeSelect=application%2Fsparql-results%2Bjson%2C*%2F*%3Bq%3D0.9&outputFormat=table)
+[List available types - via scanning (a sample of) instances](https://yasgui.triply.cc/#query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20*%20WHERE%20%7B%0A%20%20SERVICE%20%3Ccache%3A%3E%20%7B%20%7B%20SELECT%20DISTINCT%20%3Ftype%20%7B%20%3Fs%20a%20%3Ftype%20%7D%20LIMIT%2010000%20%7D%20%7D%0A%20%20OPTIONAL%20%7B%20%3Ftype%20rdfs%3Alabel%20%3Fl%20%7D%0A%7D%0ALIMIT%201000&endpoint=https%3A%2F%2Fdata.aksw.org%2Fmobydex&requestMethod=POST&tabTitle=Query%201&headers=%7B%7D&contentTypeConstruct=application%2Fn-triples%2C*%2F*%3Bq%3D0.9&contentTypeSelect=application%2Fsparql-results%2Bjson%2C*%2F*%3Bq%3D0.9&outputFormat=table)
 ```sparql
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT * WHERE {
