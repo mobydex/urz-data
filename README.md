@@ -11,7 +11,7 @@ The data infrastructure reuses that of the former Coypu project.
 
 ## Summary
 
-* Fuseki Server: https://data.aksw.org/mobydex
+* Fuseki Server: https://data.aksw.org
 * MobyDex SPARQL Endpoint: https://data.aksw.org/mobydex
 * Coypu SPARQL Endpoint: https://copper.coypu.org/coypu
 * GraphQl Endpoint: https://copper.coypu.org/coypu/graphql
