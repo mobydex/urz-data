@@ -2,6 +2,12 @@ import requests
 import json
 import polyline
 
+# Notes to get this script working:
+# python -m venv venv
+# . venv/bin/activate
+# pip install polyline
+# pip install requests
+
 project_id = 2
 coordiante_system = 'WGS84'
 coordinate_precision = 5
