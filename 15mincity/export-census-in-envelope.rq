@@ -1,0 +1,37 @@
+PREFIX spatial: <http://jena.apache.org/spatial#>
+PREFIX spatialF: <http://jena.apache.org/function/spatial#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?cell1Wkt ?cell1WktColor ?cell2Wkt ?cell2WktColor ?count WHERE {
+  BIND("blue" AS ?cell1WktColor)
+  BIND("red" AS ?cell2WktColor)
+  BIND("POLYGON((6.6017600000000005 51.32242, 6.6017600000000005 51.599000000000004, 6.98873 51.599000000000004, 6.98873 51.32242, 6.6017600000000005 51.32242))" AS ?areaStr)
+  # BIND("POLYGON ((6.7 51.47, 6.7 51.4, 6.82 51.4, 6.82 51.47, 6.7 51.47))" AS ?areaStr)
+  BIND(spatialF:transformSRS(strdt(?areaStr, geo:wktLiteral), <http://www.opengis.net/def/crs/EPSG/0/4326>) AS ?areaWkt)
+
+  LATERAL {
+    SELECT ?areaWkt ?cell1Wkt (geof:collect(?cell2MemberWkt) AS ?cell2Wkt) (COUNT(*) AS ?count)
+    {
+      { SELECT * {
+        GRAPH <https://data.aksw.org/zensus/2022/> {
+          ?cell1 spatial:intersectBoxGeom(?areaWkt) .
+          ?cell1 geo:hasGeometry/geo:asWKT ?cell1Wkt .
+          FILTER(!bound(?areaWkt) || geof:sfIntersects(?cell1Wkt, ?areaWkt))
+        }
+      } }
+      # LATERAL {
+      SERVICE <loop:concurrent+50-20:> {
+        GRAPH <https://data.mobydex.org/osm/20250903/15mincity/> {
+          ?cell2 spatial:intersectBoxGeom(?cell1Wkt) .
+          ?cell2 geo:hasGeometry/geo:asWKT ?cell2MemberWkt .
+          FILTER(!bound(?cell1Wkt) || geof:sfIntersects(?cell2MemberWkt, ?cell1Wkt))
+        }
+      }
+    } GROUP BY ?areaWkt ?cell1Wkt
+  }
+}
+
+

@@ -1,0 +1,42 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX eg: <http://www.example.org/>
+PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX json: <https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf#>
+PREFIX norse: <https://w3id.org/aksw/norse#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX url: <http://jsa.aksw.org/fn/url/>
+
+CONSTRUCT {
+  ?s eg:cellId ?cellId .
+  ?s eg:projectId ?projectId .
+  ?s geo:hasGeometry ?sg .
+  ?sg geo:asWKT ?polygon
+}
+#SELECT ?cellId ?polygon ?polygonTooltip WHERE
+{
+  BIND(2 AS ?projectId)
+  BIND('WGS84' AS ?coordinateSystem)
+  BIND(5 AS ?coordinatePrecision)
+  # Lateral join - essentialy a for each loop.
+  LATERAL { SERVICE <cache:> {
+    BIND("https://mobydex.locoslab.com/controller-service/projects/" + STR(?projectId) + "/cells?coordinateSystem=" + STR(?coordinateSystem) + "&coordinatePrecision=" + STR(?coordinatePrecision) + "&pageOffset=0&pageSize=10000" AS ?url)
+  } }
+  BIND(STRDT(url:text(?url), norse:json) AS ?json)
+  BIND(norse:json.get(?json, "elements") AS ?elements)
+  ?elements norse:json.unnest ?cell .
+  BIND(norse:json.get(?cell, "id") AS ?cellId)
+  BIND(IRI(STR(?url) + "#cell" + STR(?cellId)) AS ?s)
+  BIND(IRI(STR(?url) + "#cell-geometry" + STR(?cellId)) AS ?sg)
+  BIND(norse:json.path(?cell, "$.bounds.coordinates") AS ?rawCoords)
+  BIND(geof:parsePolyline(?rawCoords) AS ?linestring)
+  BIND(STRDT(REPLACE(STR(?linestring), "LINESTRING", "POLYGON (") + ")", datatype(?linestring)) AS ?polygon)
+  
+  # For each routing cell, find the census cells
+  
+  # BIND(geof:buffer(?linestring, 1, uom:metre) AS ?polygon)
+  BIND(STR(?cellId) AS ?polygonTooltip)
+} LIMIT 10000
+
+

@@ -1,0 +1,31 @@
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX url: <http://jsa.aksw.org/fn/url/>
+PREFIX norse: <https://w3id.org/aksw/norse#>
+
+SELECT ?url ?projectId ?originCell ?destinationCell (MAX(?duration) AS ?maxDuration) WHERE
+{
+  BIND(2 AS ?projectId)
+  #BIND('WGS84' AS ?coordiante_system)
+  #BIND(5 AS ?coordinate_precision)
+  BIND(70 AS ?computation_id)
+  BIND(271 AS ?origin)
+  # 271-1050
+  # BIND(272 AS ?destination)
+  BIND("https://mobydex.locoslab.com/controller-service/computations/" + STR(?computation_id) 
+    + "/directions?origins=" + STR(?origin)
+    # "&destinations=" + STR(?destination)
+    + "&steps=false&routes=false" AS ?url)
+  # BIND("https://mobydex.locoslab.com/controller-service/computations/" + STR(?route_computation_id) + "/computations?pageOffset=0&pageSize=10000" AS ?url)
+  BIND(STRDT(url:text(?url), norse:json) AS ?json)
+  ?json norse:json.unnest ?entry .
+  BIND(norse:json.get(?entry, "originCell") AS ?originCell)
+  BIND(norse:json.get(?entry, "destinationCell") AS ?destinationCell)
+  FILTER(?destinationCell = 1050)
+  BIND(norse:json.get(?entry, "routes") AS ?routes)
+  ?routes norse:json.unnest ?route .
+  BIND(norse:json.get(?route, "duration") AS ?duration)
+} 
+GROUP BY ?url ?projectId ?originCell ?destinationCell
+
