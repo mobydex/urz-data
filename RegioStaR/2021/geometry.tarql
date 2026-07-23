@@ -1,0 +1,26 @@
+PREFIX raw: <https://example.org/vocab/raw/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+  ?geometryRecord
+    raw:ags ?AGS_0 ;
+    raw:ars ?ARS_0 ;
+    raw:objectId ?OBJID ;
+    geo:asWKT ?wkt .
+}
+WHERE {
+  BIND(
+    IRI(CONCAT(
+      "https://example.org/id/bkg-object/",
+      ENCODE_FOR_URI(?OBJID)
+    ))
+    AS ?geometryRecord
+  )
+
+  BIND(
+    STRDT(?geometry, geo:wktLiteral)
+    AS ?wkt
+  )
+}
+

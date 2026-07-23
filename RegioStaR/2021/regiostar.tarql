@@ -1,0 +1,115 @@
+PREFIX dct:  <http://purl.org/dc/terms/>
+PREFIX geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+PREFIX ex:   <https://example.org/vocab/>
+PREFIX id:   <https://example.org/id/>
+PREFIX rs:   <https://example.org/id/regiostar/>
+
+CONSTRUCT {
+  ?municipality
+    a geo:Feature ;
+    dct:identifier ?ags_0 ;
+    skos:prefLabel ?municipalityLabel ;
+    ex:regionalKey ?regionalKey ;
+    ex:nutsRegion ?nutsRegion ;
+
+    ex:regioStaR2 ?rs2 ;
+    ex:regioStaR4 ?rs4 ;
+    ex:regioStaR17 ?rs17 ;
+    ex:regioStaR7 ?rs7 ;
+    ex:regioStaR5 ?rs5 ;
+    ex:regioStaRGem7 ?rsGem7 ;
+    ex:regioStaRGem5 ?rsGem5 ;
+
+    geo:hasGeometry ?geometryResource .
+
+  ?geometryResource
+    a geo:Geometry ;
+    dct:identifier ?objid ;
+    geo:asWKT ?geometryLiteral .
+}
+WHERE {
+  BIND(
+    IRI(CONCAT(
+      "https://example.org/id/municipality/",
+      ?ags_0
+    ))
+    AS ?municipality
+  )
+
+  BIND(STRLANG(?name_21, "de") AS ?municipalityLabel)
+
+  BIND(
+    IRI(CONCAT(
+      "http://dcat-ap.de/def/politicalGeocoding/regionalKey/",
+      ?ars_0
+    ))
+    AS ?regionalKey
+  )
+
+  BIND(
+    IRI(CONCAT(
+      "https://data.europa.eu/nuts/code/",
+      ?nuts
+    ))
+    AS ?nutsRegion
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/rs2/", ?RS2))
+    AS ?rs2
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/rs4/", ?RS4))
+    AS ?rs4
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/rs17/", ?RS17))
+    AS ?rs17
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/rs7/", ?RS7))
+    AS ?rs7
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/rs5/", ?RS5))
+    AS ?rs5
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/gem7/", ?RSGem7))
+    AS ?rsGem7
+  )
+
+  BIND(
+    IRI(CONCAT("https://example.org/id/regiostar/gem5/", ?RSGem5))
+    AS ?rsGem5
+  )
+
+  BIND(
+    IRI(CONCAT(
+      "https://example.org/id/geometry/",
+      ENCODE_FOR_URI(?objid)
+    ))
+    AS ?geometryResource
+  )
+
+  # Adjust the CRS URI to match the shapefile, or reproject with ogr2ogr.
+  BIND(
+    STRDT(
+      CONCAT(
+        "<http://www.opengis.net/def/crs/EPSG/0/25832> ",
+        ?geometry
+      ),
+      geo:wktLiteral
+    )
+    AS ?geometryLiteral
+  )
+}
+
