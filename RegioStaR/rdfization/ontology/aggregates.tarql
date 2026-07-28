@@ -1,0 +1,18 @@
+PREFIX r:    <https://example.org/regiostar/resource/>
+PREFIX o:    <https://example.org/regiostar/ontology/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+CONSTRUCT {
+  ?wholeConcept
+#      o:aggregates ?partConcept ;
+      skos:narrowMatch ?partConcept .
+
+  ?partConcept
+#      o:isAggregatedBy ?wholeConcept ;
+      skos:broadMatch ?wholeConcept .
+}
+# FROM <aggregates.csv#encoding=utf-8;delimiter=semicolon;header=absent>
+WHERE {
+  BIND(IRI(CONCAT(STR(r:), "concept/", ENCODE_FOR_URI(?whole_scheme), "/", ENCODE_FOR_URI(?whole_code))) AS ?wholeConcept)
+  BIND(IRI(CONCAT(STR(r:), "concept/", ENCODE_FOR_URI(?part_scheme), "/", ENCODE_FOR_URI(?part_code))) AS ?partConcept)
+}
