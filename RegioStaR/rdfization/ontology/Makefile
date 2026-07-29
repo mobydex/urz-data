@@ -7,7 +7,7 @@ TARQL = docker run --rm -i -v "$$(pwd):/data" mikulas/tarql
 SANSA_TARQL = docker run --rm -i -v "$$(pwd):/data" aksw/rpt:2.0.0-rc7 sansa tarql
 
 # Source: https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile
-.PHONY: help
+.PHONY: help all clean
 
 .ONESHELL:
 help:   ## Show these help instructions
@@ -17,10 +17,12 @@ target: ## mkdir target
 	mkdir -p target
 
 target/labels.ttl: labels.csv labels.tarql | target ## RDFize RegioStaR labels
-	$(SANSA_TARQL) /data/labels.tarql /data/labels.csv > target/labels.ttl
+	$(SANSA_TARQL) /data/labels.tarql /data/labels.csv --out-format turtle/blocks > target/labels.ttl
 
 target/aggregates.ttl: aggregates.csv aggregates.tarql | target ## RDFize RegioStaR aggregates
-	$(SANSA_TARQL) /data/aggregates.tarql /data/aggregates.csv > target/aggregates.ttl
+	$(SANSA_TARQL) /data/aggregates.tarql /data/aggregates.csv --out-format turtle/blocks > target/aggregates.ttl
 
 all: target/labels.ttl target/aggregates.ttl
 
+clean:
+	rm target/labels.ttl target/aggregates.ttl

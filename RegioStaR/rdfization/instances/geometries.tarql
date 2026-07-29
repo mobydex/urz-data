@@ -3,6 +3,7 @@ PREFIX geo: <http://www.opengis.net/ont/geosparql#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 PREFIX r:   <https://data.aksw.org/bkg/>
+PREFIX rrr: <https://data.aksw.org/regiostar/>
 
 CONSTRUCT {
   ?feature
@@ -17,8 +18,10 @@ CONSTRUCT {
     .
 }
 WHERE {
+  BIND("2021"^^xsd:gYear AS ?year)
+
   #BIND(IRI(CONCAT("http://dcat-ap.de/def/politicalGeocoding/regionalKey/", ?ARS_0)) AS ?feature)
-  BIND(IRI(CONCAT("https://data.aksw.org/dcat-ap.de/politicalGeocoding/regionalKey/", ?ARS_0)) AS ?feature)
+  BIND(IRI(CONCAT(STR(rrr:), "politicalGeocoding/regionalKey/", STR(?year), "/", ?ARS_0)) AS ?feature)
   BIND(IRI(CONCAT(STR(r:), "object/", ENCODE_FOR_URI(?OBJID))) AS ?geometryRecord)
   BIND(STRDT(?geometry, geo:wktLiteral) AS ?wkt)
 }

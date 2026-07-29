@@ -12,7 +12,7 @@ loud = echo "@@" $(1);$(1)
 TARQL = docker run --rm -i -v "$$(pwd):/data" mikulas/tarql
 
 # Source: https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile
-.PHONY: help all
+.PHONY: help all clean
 
 .ONESHELL:
 help:   ## Show these help instructions
@@ -28,8 +28,8 @@ target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx: | target/downloa
 	wget -c 'https://mobilithek.info/mdp-api/files/aux/689522949364838400/2024%20RegioStaR-Referenzdateien_Mobilthek.xlsx' -O target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx.tmp
 	mv target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx.tmp target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx
 
-target/regiostar-2021.ttl: target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx regiostar.tarql ## RDFize RegioStaR 2021
-	ogr2ogr -f CSV /vsistdout/ target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx ReferenzGebietsstand2021 -s_srs OGC:CRS84 -t_srs OGC:CRS84 -lco GEOMETRY=AS_WKT -lco GEOMETRY_NAME=geometry | $(TARQL) --stdin /data/regiostar.tarql > target/regiostar-2021.ttl
+target/regiostar-2021.ttl: target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx regiostar-2021.tarql ## RDFize RegioStaR 2021
+	ogr2ogr -f CSV /vsistdout/ target/downloads/2024_RegioStaR-Referenzdateien_Mobilthek.xlsx ReferenzGebietsstand2021 -s_srs OGC:CRS84 -t_srs OGC:CRS84 -lco GEOMETRY=AS_WKT -lco GEOMETRY_NAME=geometry | $(TARQL) --stdin /data/regiostar-2021.tarql > target/regiostar-2021.ttl
 
 # target/2024_RegioStaR-Referenzdateien_Mobilthek.csv
 
@@ -62,4 +62,5 @@ target/geometries.ttl: target/vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_
 
 all: target/regiostar-2021.ttl target/geometries.ttl
 
-
+clean:
+	rm target/regiostar-2021.ttl target/geometries.ttl
