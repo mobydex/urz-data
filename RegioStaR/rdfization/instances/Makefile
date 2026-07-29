@@ -12,7 +12,7 @@ loud = echo "@@" $(1);$(1)
 TARQL = docker run --rm -i -v "$$(pwd):/data" mikulas/tarql
 
 # Source: https://stackoverflow.com/questions/4219255/how-do-you-get-the-list-of-targets-in-a-makefile
-.PHONY: help
+.PHONY: help all
 
 .ONESHELL:
 help:   ## Show these help instructions
@@ -42,7 +42,7 @@ target/vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_1231/DE_VG250.gpkg: tar
 	unzip -DD -d target -n target/downloads/vg250-ew_12-31.utm32s.gpkg.ebenen.zip
 
 target/geometries.ttl: target/vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_1231/DE_VG250.gpkg geometries.tarql
-	ogr2ogr -f CSV /vsistdout/ target/vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_1231/DE_VG250.gpkg VG250_GEM -t_srs OGC:CRS84 -lco GEOMETRY=AS_WKT -lco GEOMETRY_NAME=geometry | $(TARQL) --stdin /data/geometry.tarql > target/geometries.ttl
+	ogr2ogr -f CSV /vsistdout/ target/vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_1231/DE_VG250.gpkg VG250_GEM -t_srs OGC:CRS84 -lco GEOMETRY=AS_WKT -lco GEOMETRY_NAME=geometry | $(TARQL) --stdin /data/geometries.tarql > target/geometries.ttl
 
 #target/opendata.hessen.de.ttl: | target ## download
 #	rpt integrate -e remote --loc https://sparql.opendata.hessen.de/odp-hessen/ spo.rq --out-file target/opendata.hessen.de.ttl
@@ -59,4 +59,7 @@ target/geometries.ttl: target/vg250-ew_12-31.utm32s.gpkg.ebenen/vg250-ew_ebenen_
 #
 #target/stage99.ttl: | target/stage01.trig target/stage03.ttl ## merge and flatten
 #	rpt integrate target/stage01.trig target/stage03.ttl 'CONSTRUCT { ?s ?p ?o } { { ?s ?p ?o } UNION { GRAPH ?g { ?s ?p ?o } } }' --out-file target/stage99.ttl
+
+all: target/regiostar-2021.ttl target/geometries.ttl
+
 

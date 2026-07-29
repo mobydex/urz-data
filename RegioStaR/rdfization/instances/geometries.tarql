@@ -1,0 +1,25 @@
+PREFIX raw: <https://example.org/vocab/raw/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+PREFIX r:   <https://data.aksw.org/bkg/>
+
+CONSTRUCT {
+  ?feature
+    geo:hasGeometry ?geometryRecord ; # Must avoid clash with ?geometry column from the CSV.
+    .
+
+  ?geometryRecord
+    raw:ags ?AGS_0 ;
+    raw:ars ?ARS_0 ;
+    r:objectId ?OBJID ;
+    geo:asWKT ?wkt ;
+    .
+}
+WHERE {
+  #BIND(IRI(CONCAT("http://dcat-ap.de/def/politicalGeocoding/regionalKey/", ?ARS_0)) AS ?feature)
+  BIND(IRI(CONCAT("https://data.aksw.org/dcat-ap.de/politicalGeocoding/regionalKey/", ?ARS_0)) AS ?feature)
+  BIND(IRI(CONCAT(STR(r:), "object/", ENCODE_FOR_URI(?OBJID))) AS ?geometryRecord)
+  BIND(STRDT(?geometry, geo:wktLiteral) AS ?wkt)
+}
+

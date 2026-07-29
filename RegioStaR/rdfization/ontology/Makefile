@@ -22,3 +22,5 @@ target/labels.ttl: labels.csv labels.tarql | target ## RDFize RegioStaR labels
 target/aggregates.ttl: aggregates.csv aggregates.tarql | target ## RDFize RegioStaR aggregates
 	$(SANSA_TARQL) /data/aggregates.tarql /data/aggregates.csv > target/aggregates.ttl
 
+all: target/labels.ttl target/aggregates.ttl
+
